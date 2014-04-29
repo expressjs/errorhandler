@@ -50,6 +50,7 @@ exports = module.exports = function errorHandler(){
     if (err.status) res.statusCode = err.status;
     if (res.statusCode < 400) res.statusCode = 500;
     if ('test' != env) console.error(err.stack);
+    if (res._header) return;
     var accept = req.headers.accept || '';
     // html
     if (~accept.indexOf('html')) {

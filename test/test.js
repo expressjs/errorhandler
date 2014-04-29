@@ -91,4 +91,25 @@ describe('connect.errorHandler()', function () {
       });
     });
   });
+
+  describe('headers sent', function () {
+    it('should not die', function (done) {
+      var app = connect();
+      var handler = errorHandler();
+      app.use(function (req, res, next) {
+        res.end('0');
+        process.nextTick(function () {
+          handler(new Error('msg'), req, res, function (error) {
+            process.nextTick(function () {
+              throw error;
+            });
+         });
+       });
+      });
+
+      request(app)
+      .get('/')
+      .expect(200, done);
+    });
+  });
 });
