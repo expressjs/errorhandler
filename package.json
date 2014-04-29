@@ -24,6 +24,6 @@
     "connect": "*"
   },
   "scripts": {
-    "test": "make test"
+    "test": "mocha --reporter spec --require should"
   }
 }

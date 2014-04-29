@@ -1,3 +1,6 @@
+
+process.env.NODE_ENV = 'test';
+
 var connect = require('connect');
 var request = require('supertest');
 var http = require('http');
