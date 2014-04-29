@@ -2,6 +2,8 @@
 
 Previously `connect.errorHandler()`.
 
+[![Build Status](https://travis-ci.org/expressjs/errorhandler.svg?branch=master)](https://travis-ci.org/expressjs/errorhandler)
+
 Usage:
 
 ```js
