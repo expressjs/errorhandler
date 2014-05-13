@@ -8,12 +8,24 @@ Previously `connect.errorHandler()`.
 $ npm install errorhandler
 ```
 
+## API
+
+### errorhandler()
+
+Create new middleware to handle errors and respond with content negotiation.
+This middleware is only intended to be used in a development environment, as
+the full error stack traces will be send back to the client when an error
+occurs.
+
 ## Example
 
 ```js
 var app = require('connect')
 var errorhandler = require('errorhandler')
-app.use(errorhandler())
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(errorhandler())
+}
 ```
 
 ## License
