@@ -1,14 +1,19 @@
-# Error Handler
+# errorhandler [![Build Status](https://travis-ci.org/expressjs/errorhandler.svg?branch=master)](https://travis-ci.org/expressjs/errorhandler) [![NPM version](https://badge.fury.io/js/errorhandler.svg)](http://badge.fury.io/js/errorhandler)
 
 Previously `connect.errorHandler()`.
 
-[![Build Status](https://travis-ci.org/expressjs/errorhandler.svg?branch=master)](https://travis-ci.org/expressjs/errorhandler)
+## Install
 
-Usage:
+```sh
+$ npm install errorhandler
+```
+
+## Example
 
 ```js
-var app = require('connect');
-app.use(require('errorhandler')())
+var app = require('connect')
+var errorhandler = require('errorhandler')
+app.use(errorhandler())
 ```
 
 ## License
