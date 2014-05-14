@@ -20,8 +20,10 @@ occurs.
 ## Example
 
 ```js
-var app = require('connect')
+var connect = require('connect')
 var errorhandler = require('errorhandler')
+
+app = connect()
 
 if (process.env.NODE_ENV === 'development') {
   app.use(errorhandler())
