@@ -3,6 +3,7 @@ process.env.NODE_ENV = 'test';
 
 var connect = require('connect');
 var request = require('supertest');
+var should = require('should');
 var http = require('http');
 var errorHandler = require('..');
 
