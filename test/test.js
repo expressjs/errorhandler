@@ -6,7 +6,7 @@ var request = require('supertest');
 var http = require('http');
 var errorHandler = require('..');
 
-describe('connect.errorHandler()', function () {
+describe('errorHandler()', function () {
   var app, error, server;
 
   before(function () {
