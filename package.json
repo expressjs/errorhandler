@@ -18,10 +18,10 @@
     "url": "https://github.com/expressjs/errorhandler/issues"
   },
   "devDependencies": {
+    "connect": "3",
     "mocha": ">= 1.17.0 < 2",
-    "should": ">= 3.0.0 < 4",
-    "supertest": "*",
-    "connect": "*"
+    "should": "~4.0.1",
+    "supertest": "~0.13.0"
   },
   "engines": {
     "node": ">= 0.8"
