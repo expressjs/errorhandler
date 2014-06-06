@@ -1,3 +1,8 @@
+unreleased
+==========
+
+  * Pass on errors from reading error files
+
 1.0.1 / 2014-04-29
 ==================
 

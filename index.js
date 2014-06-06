@@ -55,7 +55,9 @@ exports = module.exports = function errorHandler(){
     // html
     if (~accept.indexOf('html')) {
       fs.readFile(__dirname + '/public/style.css', 'utf8', function(e, style){
+        if (e) return next(e);
         fs.readFile(__dirname + '/public/error.html', 'utf8', function(e, html){
+          if (e) return next(e);
           var stack = (err.stack || '')
             .split('\n').slice(1)
             .map(function(v){ return '<li>' + v + '</li>'; }).join('');
