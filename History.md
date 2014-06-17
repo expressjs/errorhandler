@@ -4,6 +4,7 @@ unreleased
   * Display error on console formatted like `throw`
   * Escape HTML with `escape-html` module
   * Escape HTML in stack trace
+  * Escape HTML in title
   * Set `X-Content-Type-Options: nosniff` header
 
 1.0.2 / 2014-06-05
