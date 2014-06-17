@@ -1,5 +1,5 @@
-unreleased
-==========
+1.1.0 / 2014-06-16
+==================
 
   * Display error on console formatted like `throw`
   * Escape HTML with `escape-html` module
