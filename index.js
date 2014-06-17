@@ -42,8 +42,15 @@ exports = module.exports = function errorHandler(){
   var env = process.env.NODE_ENV || 'development'
 
   return function errorHandler(err, req, res, next){
-    if (err.status) res.statusCode = err.status;
-    if (res.statusCode < 400) res.statusCode = 500;
+    // respect err.status
+    if (err.status) {
+      res.statusCode = err.status
+    }
+
+    // default status code to 500
+    if (res.statusCode < 400) {
+      res.statusCode = 500
+    }
 
     // write error to console
     if (env !== 'test') {
@@ -74,7 +81,7 @@ exports = module.exports = function errorHandler(){
               .replace('{stack}', stack)
               .replace('{title}', escapeHtml(exports.title))
               .replace('{statusCode}', res.statusCode)
-              .replace(/\{error\}/g, escapeHtml(err.toString().replace(/\n/g, '<br/>')));
+              .replace(/\{error\}/g, escapeHtml(String(err)).replace(/  /g, ' &nbsp;').replace(/\n/g, '<br>'));
             res.setHeader('Content-Type', 'text/html; charset=utf-8');
             res.end(html);
         });
@@ -89,7 +96,7 @@ exports = module.exports = function errorHandler(){
     // plain text
     } else {
       res.setHeader('Content-Type', 'text/plain');
-      res.end(err.stack);
+      res.end(err.stack || String(err));
     }
   };
 };

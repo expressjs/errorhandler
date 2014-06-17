@@ -5,6 +5,7 @@ unreleased
   * Escape HTML with `escape-html` module
   * Escape HTML in stack trace
   * Escape HTML in title
+  * Fix up edge cases with error sent in response
   * Set `X-Content-Type-Options: nosniff` header
 
 1.0.2 / 2014-06-05
