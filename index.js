@@ -64,7 +64,7 @@ exports = module.exports = function errorHandler(){
           if (e) return next(e);
           var stack = (err.stack || '')
             .split('\n').slice(1)
-            .map(function(v){ return '<li>' + v + '</li>'; }).join('');
+            .map(function(v){ return '<li>' + escapeHtml(v).replace(/  /g, ' &nbsp;') + '</li>'; }).join('');
             html = html
               .replace('{style}', style)
               .replace('{stack}', stack)

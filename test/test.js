@@ -57,7 +57,7 @@ describe('errorHandler()', function () {
 
   describe('response content type', function () {
     beforeEach(function () {
-        error = new Error('');
+        error = new Error('boom!');
     });
 
     it('should return a html response when html is accepted', function (done) {
@@ -68,6 +68,8 @@ describe('errorHandler()', function () {
         if (err) throw err;
         res.headers['content-type'].should.startWith('text/html');
         res.text.should.containEql('<title>');
+        res.text.should.containEql('Error: boom!');
+        res.text.should.containEql(' &nbsp; &nbsp;at');
         done();
       });
     });
