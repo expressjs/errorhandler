@@ -12,10 +12,6 @@
 var escapeHtml = require('escape-html');
 var fs = require('fs');
 
-// environment
-
-var env = process.env.NODE_ENV || 'development';
-
 /**
  * Error handler:
  *
@@ -42,6 +38,9 @@ var env = process.env.NODE_ENV || 'development';
  */
 
 exports = module.exports = function errorHandler(){
+  // get environment
+  var env = process.env.NODE_ENV || 'development'
+
   return function errorHandler(err, req, res, next){
     if (err.status) res.statusCode = err.status;
     if (res.statusCode < 400) res.statusCode = 500;
