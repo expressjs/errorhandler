@@ -48,6 +48,10 @@ exports = module.exports = function errorHandler(){
     if ('test' != env) console.error(err.stack);
     if (res._header) return;
     var accept = req.headers.accept || '';
+
+    // Security header for content sniffing
+    res.setHeader('X-Content-Type-Options', 'nosniff')
+
     // html
     if (~accept.indexOf('html')) {
       fs.readFile(__dirname + '/public/style.css', 'utf8', function(e, style){

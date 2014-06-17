@@ -2,6 +2,7 @@ unreleased
 ==========
 
   * Escape HTML with `escape-html` module
+  * Set `X-Content-Type-Options: nosniff` header
 
 1.0.2 / 2014-06-05
 ==================

@@ -23,6 +23,14 @@ describe('errorHandler()', function () {
     error = null;
   });
 
+  it('should set nosniff header', function (done) {
+    error = new Error()
+    request(server)
+    .get('/')
+    .expect('X-Content-Type-Options', 'nosniff')
+    .expect(500, done)
+  })
+
   describe('status code', function () {
     it('should set the status code to 500 if a non error status code was given', function (done) {
       error = {status: 200};
