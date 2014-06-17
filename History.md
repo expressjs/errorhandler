@@ -1,3 +1,8 @@
+unreleased
+==========
+
+  * Escape HTML with `escape-html` module
+
 1.0.2 / 2014-06-05
 ==================
 

@@ -9,12 +9,8 @@
  * Module dependencies.
  */
 
-var fs;
-try {
-  fs = require('graceful-fs');
-} catch (_) {
-  fs = require('fs');
-}
+var escapeHtml = require('escape-html');
+var fs = require('fs');
 
 // environment
 
@@ -66,7 +62,7 @@ exports = module.exports = function errorHandler(){
               .replace('{stack}', stack)
               .replace('{title}', exports.title)
               .replace('{statusCode}', res.statusCode)
-              .replace(/\{error\}/g, escapeHTML(err.toString().replace(/\n/g, '<br/>')));
+              .replace(/\{error\}/g, escapeHtml(err.toString().replace(/\n/g, '<br/>')));
             res.setHeader('Content-Type', 'text/html; charset=utf-8');
             res.end(html);
         });
@@ -91,20 +87,3 @@ exports = module.exports = function errorHandler(){
  */
 
 exports.title = 'Connect';
-
-
-/**
- * Escape the given string of `html`.
- *
- * @param {String} html
- * @return {String}
- * @api private
- */
-
-function escapeHTML(html){
-  return String(html)
-    .replace(/&(?!\w+;)/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-};
