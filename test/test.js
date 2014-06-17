@@ -2,10 +2,11 @@
 process.env.NODE_ENV = 'test';
 
 var connect = require('connect');
+var errorHandler = require('..')
+var http = require('http')
 var request = require('supertest');
 var should = require('should');
-var http = require('http');
-var errorHandler = require('..');
+var util = require('util')
 
 describe('errorHandler()', function () {
   var app, error, server;
@@ -123,4 +124,75 @@ describe('errorHandler()', function () {
       .expect(200, done);
     });
   });
-});
+
+  describe('write error to console.error', function () {
+    var app
+    var error = null
+    var log
+    var old
+    before(function () {
+      old = console.error
+      console.error = function () {
+        log = util.format.apply(null, arguments)
+      }
+      process.env.NODE_ENV = ''
+      app = connect()
+      app.use(function (req, res, next) {
+        next(error)
+      })
+      app.use(errorHandler())
+    })
+    beforeEach(function () {
+      error = null
+      log = undefined
+    })
+    after(function () {
+      console.error = old
+      process.env.NODE_ENV = 'test'
+    })
+
+    it('should write stack', function (done) {
+      error = new Error('boom!')
+      request(app)
+      .get('/')
+      .expect(500, function (err) {
+        if (err) return done(err)
+        log.should.startWith('Error: boom!\n    at')
+        done()
+      })
+    })
+
+    it('should stringify primitive', function (done) {
+      error = 'boom!'
+      request(app)
+      .get('/')
+      .expect(500, function (err) {
+        if (err) return done(err)
+        log.should.equal('boom!')
+        done()
+      })
+    })
+
+    it('should stringify plain object', function (done) {
+      error = {}
+      request(app)
+      .get('/')
+      .expect(500, function (err) {
+        if (err) return done(err)
+        log.should.equal('[object Object]')
+        done()
+      })
+    })
+
+    it('should stringify plain object with toString', function (done) {
+      error = {toString: function () { return 'boom!' }}
+      request(app)
+      .get('/')
+      .expect(500, function (err) {
+        if (err) return done(err)
+        log.should.equal('boom!')
+        done()
+      })
+    })
+  })
+})

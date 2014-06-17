@@ -1,6 +1,7 @@
 unreleased
 ==========
 
+  * Display error on console formatted like `throw`
   * Escape HTML with `escape-html` module
   * Escape HTML in stack trace
   * Set `X-Content-Type-Options: nosniff` header

@@ -44,7 +44,11 @@ exports = module.exports = function errorHandler(){
   return function errorHandler(err, req, res, next){
     if (err.status) res.statusCode = err.status;
     if (res.statusCode < 400) res.statusCode = 500;
-    if ('test' != env) console.error(err.stack);
+
+    // write error to console
+    if (env !== 'test') {
+      console.error(err.stack || String(err))
+    }
 
     // cannot actually respond
     if (res._header) {
