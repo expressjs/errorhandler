@@ -9,6 +9,7 @@
  * Module dependencies.
  */
 
+var accepts = require('accepts')
 var escapeHtml = require('escape-html');
 var fs = require('fs');
 
@@ -62,13 +63,15 @@ exports = module.exports = function errorHandler(){
       return req.socket.destroy()
     }
 
-    var accept = req.headers.accept || '';
+    // negotiate
+    var accept = accepts(req)
+    var type = accept.types('html', 'json', 'text')
 
     // Security header for content sniffing
     res.setHeader('X-Content-Type-Options', 'nosniff')
 
     // html
-    if (~accept.indexOf('html')) {
+    if (type === 'html') {
       fs.readFile(__dirname + '/public/style.css', 'utf8', function(e, style){
         if (e) return next(e);
         fs.readFile(__dirname + '/public/error.html', 'utf8', function(e, html){
@@ -87,7 +90,7 @@ exports = module.exports = function errorHandler(){
         });
       });
     // json
-    } else if (~accept.indexOf('json')) {
+    } else if (type === 'json') {
       var error = { message: err.message, stack: err.stack };
       for (var prop in err) error[prop] = err[prop];
       var json = JSON.stringify({ error: error });

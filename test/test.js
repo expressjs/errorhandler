@@ -95,6 +95,7 @@ describe('errorHandler()', function () {
     it('should return a plain text response when json or html is not accepted', function (done) {
       request(server)
       .get('/')
+      .set('Accept', 'bogus')
       .end(function (err, res) {
         if (err) throw err;
         res.headers['content-type'].should.startWith('text/plain');

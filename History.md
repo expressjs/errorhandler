@@ -7,6 +7,7 @@ unreleased
   * Escape HTML in title
   * Fix up edge cases with error sent in response
   * Set `X-Content-Type-Options: nosniff` header
+  * Use accepts for negotiation
 
 1.0.2 / 2014-06-05
 ==================
