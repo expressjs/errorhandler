@@ -1,3 +1,9 @@
+unreleased
+==========
+
+  * deps: accepts@~1.0.4
+    - use `mime-types`
+
 1.1.0 / 2014-06-16
 ==================
 
