@@ -163,13 +163,13 @@ describe('errorHandler()', function () {
       })
     })
 
-    it('should stringify primitive', function (done) {
+    it('should inspect primitive', function (done) {
       error = 'boom!'
       request(app)
       .get('/')
       .expect(500, function (err) {
         if (err) return done(err)
-        log.should.equal('boom!')
+        log.should.equal('\'boom!\'')
         done()
       })
     })
@@ -180,18 +180,7 @@ describe('errorHandler()', function () {
       .get('/')
       .expect(500, function (err) {
         if (err) return done(err)
-        log.should.equal('[object Object]')
-        done()
-      })
-    })
-
-    it('should stringify plain object with toString', function (done) {
-      error = {toString: function () { return 'boom!' }}
-      request(app)
-      .get('/')
-      .expect(500, function (err) {
-        if (err) return done(err)
-        log.should.equal('boom!')
+        log.should.equal('{}')
         done()
       })
     })

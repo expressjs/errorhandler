@@ -10,6 +10,7 @@
  * Module dependencies.
  */
 
+var util = require('util')
 var accepts = require('accepts')
 var escapeHtml = require('escape-html');
 var fs = require('fs');
@@ -56,7 +57,7 @@ exports = module.exports = function errorHandler(){
 
     // write error to console
     if (env !== 'test') {
-      console.error(err.stack || String(err))
+      console.error(err.stack || util.inspect(err))
     }
 
     // cannot actually respond
@@ -85,7 +86,7 @@ exports = module.exports = function errorHandler(){
               .replace('{stack}', stack)
               .replace('{title}', escapeHtml(exports.title))
               .replace('{statusCode}', res.statusCode)
-              .replace(/\{error\}/g, escapeHtml(String(err)).replace(/  /g, ' &nbsp;').replace(/\n/g, '<br>'));
+              .replace(/\{error\}/g, escapeHtml(util.inspect(err)).replace(/  /g, ' &nbsp;').replace(/\n/g, '<br>'));
             res.setHeader('Content-Type', 'text/html; charset=utf-8');
             res.end(html);
         });
@@ -100,7 +101,7 @@ exports = module.exports = function errorHandler(){
     // plain text
     } else {
       res.setHeader('Content-Type', 'text/plain');
-      res.end(err.stack || String(err));
+      res.end(err.stack || util.inspect(err));
     }
   };
 };
