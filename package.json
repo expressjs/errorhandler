@@ -12,7 +12,7 @@
   "devDependencies": {
     "connect": "3",
     "istanbul": "0.3.0",
-    "mocha": "~1.20.1",
+    "mocha": "~1.21.4",
     "should": "~4.0.1",
     "supertest": "~0.13.0"
   },
