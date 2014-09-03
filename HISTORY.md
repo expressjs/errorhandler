@@ -1,6 +1,7 @@
 unreleased
 ==========
 
+  * Display error using `util.inspect` if no other representation
   * deps: accepts@~1.1.0
 
 1.1.1 / 2014-06-20

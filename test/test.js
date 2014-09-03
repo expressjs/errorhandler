@@ -175,12 +175,23 @@ describe('errorHandler()', function () {
     })
 
     it('should stringify plain object', function (done) {
-      error = {}
+      error = {hop: 'pop'}
       request(app)
       .get('/')
       .expect(500, function (err) {
         if (err) return done(err)
-        log.should.equal('[object Object]')
+        log.should.equal('{ hop: \'pop\' }')
+        done()
+      })
+    })
+
+    it('should stringify number', function (done) {
+      error = 42
+      request(app)
+      .get('/')
+      .expect(500, function (err) {
+        if (err) return done(err)
+        log.should.equal('42')
         done()
       })
     })
