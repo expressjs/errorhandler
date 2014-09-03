@@ -23,7 +23,7 @@ var errorhandler = require('errorhandler')
 
 Create new middleware to handle errors and respond with content negotiation.
 This middleware is only intended to be used in a development environment, as
-the full error stack traces will be send back to the client when an error
+the full error stack traces will be sent back to the client when an error
 occurs.
 
 ## Example
