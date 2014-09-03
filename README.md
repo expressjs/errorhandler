@@ -14,6 +14,10 @@ $ npm install errorhandler
 
 ## API
 
+```js
+var errorhandler = require('errorhandler')
+```
+
 ### errorhandler()
 
 Create new middleware to handle errors and respond with content negotiation.
@@ -30,6 +34,7 @@ var errorhandler = require('errorhandler')
 var app = connect()
 
 if (process.env.NODE_ENV === 'development') {
+  // only use in development
   app.use(errorhandler())
 }
 ```
