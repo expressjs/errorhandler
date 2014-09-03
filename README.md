@@ -1,8 +1,9 @@
 # errorhandler
 
-[![NPM version](https://badge.fury.io/js/errorhandler.svg)](http://badge.fury.io/js/errorhandler)
-[![Build Status](https://travis-ci.org/expressjs/errorhandler.svg?branch=master)](https://travis-ci.org/expressjs/errorhandler)
-[![Coverage Status](https://img.shields.io/coveralls/expressjs/errorhandler.svg?branch=master)](https://coveralls.io/r/expressjs/errorhandler)
+[![NPM Version][npm-image]][npm-url]
+[![NPM Downloads][downloads-image]][downloads-url]
+[![Build Status][travis-image]][travis-url]
+[![Test Coverage][coveralls-image]][coveralls-url]
 
 Development-only error handler middleware
 
@@ -42,3 +43,12 @@ if (process.env.NODE_ENV === 'development') {
 ## License
 
 [MIT](LICENSE)
+
+[npm-image]: https://img.shields.io/npm/v/errorhandler.svg?style=flat
+[npm-url]: https://npmjs.org/package/errorhandler
+[travis-image]: https://img.shields.io/travis/expressjs/errorhandler.svg?style=flat
+[travis-url]: https://travis-ci.org/expressjs/errorhandler
+[coveralls-image]: https://img.shields.io/coveralls/expressjs/errorhandler.svg?style=flat
+[coveralls-url]: https://coveralls.io/r/expressjs/errorhandler?branch=master
+[downloads-image]: http://img.shields.io/npm/dm/errorhandler.svg?style=flat
+[downloads-url]: https://npmjs.org/package/errorhandler
