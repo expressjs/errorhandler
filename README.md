@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/expressjs/errorhandler.svg?branch=master)](https://travis-ci.org/expressjs/errorhandler)
 [![Coverage Status](https://img.shields.io/coveralls/expressjs/errorhandler.svg?branch=master)](https://coveralls.io/r/expressjs/errorhandler)
 
-Previously `connect.errorHandler()`.
+Development-only error handler middleware
 
 ## Install
 
