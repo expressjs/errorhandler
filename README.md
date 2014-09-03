@@ -4,6 +4,7 @@
 [![NPM Downloads][downloads-image]][downloads-url]
 [![Build Status][travis-image]][travis-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
+[![Gratipay][gratipay-image]][gratipay-url]
 
 Development-only error handler middleware
 
@@ -52,3 +53,5 @@ if (process.env.NODE_ENV === 'development') {
 [coveralls-url]: https://coveralls.io/r/expressjs/errorhandler?branch=master
 [downloads-image]: http://img.shields.io/npm/dm/errorhandler.svg?style=flat
 [downloads-url]: https://npmjs.org/package/errorhandler
+[gratipay-image]: https://img.shields.io/gratipay/dougwilson.svg?style=flat
+[gratipay-url]: https://www.gratipay.com/dougwilson/
