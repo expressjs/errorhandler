@@ -9,7 +9,7 @@
   "license": "MIT",
   "repository": "expressjs/errorhandler",
   "dependencies": {
-    "accepts": "~1.1.0",
+    "accepts": "~1.1.1",
     "escape-html": "1.0.1"
   },
   "devDependencies": {
