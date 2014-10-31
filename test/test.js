@@ -207,4 +207,55 @@ describe('errorHandler()', function () {
       })
     })
   })
+  describe('write error to opts.log', function () {
+    var app
+    var error = 'foo'
+      
+    before(function () {
+      app = connect()
+      app.use(function (req, res, next) {
+        next(error)
+      })
+    })
+    it('should call callback with error message if supplied', function (done) {
+      var called = false
+
+      app.use(errorHandler({
+        log: function (str) {
+          str.should.equal(error)
+          called = true
+        }
+      }))
+      
+      request(app)
+      .get('/')
+      .expect(500, function (err) {
+        if (err) return done(err)
+        called.should.equal(true)
+        done()
+      })
+    })
+    it('should not call console.error if opts.log is supplied', function (done) {
+      var called = false
+      var old = console.error
+      var log = null
+
+      before(function () {
+        console.error = function () {
+          log = util.format.apply(null, arguments)
+        }
+      })
+      after(function () {
+        console.error = old
+      })
+      
+      request(app)
+      .get('/')
+      .expect(500, function (err) {
+        if (err) return done(err)
+        (log === null).should.be.ok
+        done()
+      })
+    })
+  })
 })

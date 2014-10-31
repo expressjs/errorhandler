@@ -47,9 +47,11 @@ var toString = Object.prototype.toString
  * @api public
  */
 
-exports = module.exports = function errorHandler(){
+exports = module.exports = function errorHandler(opts){
   // get environment
   var env = process.env.NODE_ENV || 'development'
+    
+  opts = opts || {}
 
   return function errorHandler(err, req, res, next){
     // respect err.status
@@ -63,7 +65,9 @@ exports = module.exports = function errorHandler(){
     }
 
     // write error to console
-    if (env !== 'test') {
+    if (opts.log) {
+      opts.log(stringify(err))
+    } else if (env !== 'test') {
       console.error(stringify(err))
     }
 
