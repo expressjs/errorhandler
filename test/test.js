@@ -1,11 +1,11 @@
 
 process.env.NODE_ENV = 'test';
 
+var assert = require('assert')
 var connect = require('connect');
 var errorHandler = require('..')
 var http = require('http')
 var request = require('supertest');
-var should = require('should');
 var util = require('util')
 
 describe('errorHandler()', function () {
@@ -37,22 +37,14 @@ describe('errorHandler()', function () {
       error = {status: 200};
       request(server)
       .get('/')
-      .end(function (err, res) {
-        if (err) throw err;
-        res.statusCode.should.be.exactly(500);
-        done();
-      });
+      .expect(500, done)
     });
 
     it('should pass an error status code to the response object', function (done) {
       error = {status: 404};
       request(server)
       .get('/')
-      .end(function (err, res) {
-        if (err) throw err;
-        res.statusCode.should.be.exactly(404);
-        done();
-      });
+      .expect(404, done)
     });
   });
 
@@ -65,28 +57,25 @@ describe('errorHandler()', function () {
       request(server)
       .get('/')
       .set('Accept', 'text/html')
-      .end(function (err, res) {
-        if (err) throw err;
-        res.headers['content-type'].should.startWith('text/html');
-        res.text.should.containEql('<title>');
-        res.text.should.containEql('Error: boom!');
-        res.text.should.containEql(' &nbsp; &nbsp;at');
-        done();
-      });
+      .expect('Content-Type', /text\/html/)
+      .expect(/<title>/)
+      .expect(/Error: boom!/)
+      .expect(/ &nbsp; &nbsp;at/)
+      .end(done)
     });
 
     it('should return a json response when json is accepted', function (done) {
       request(server)
       .get('/')
       .set('Accept', 'application/json')
+      .expect('Content-Type', /application\/json/)
       .end(function (err, res) {
         if (err) throw err;
         var errorMessage = JSON.parse(res.text);
 
-        res.headers['content-type'].should.startWith('application/json');
-        errorMessage.should.be.a.Object;
-        errorMessage.should.have.property('error');
-        errorMessage.error.should.have.properties(['message', 'stack']);
+        assert.strictEqual(typeof errorMessage, 'object')
+        assert.deepEqual(Object.keys(errorMessage).sort(), ['error'])
+        assert.deepEqual(Object.keys(errorMessage.error).sort(), ['message', 'stack'])
 
         done();
       });
@@ -96,12 +85,8 @@ describe('errorHandler()', function () {
       request(server)
       .get('/')
       .set('Accept', 'bogus')
-      .end(function (err, res) {
-        if (err) throw err;
-        res.headers['content-type'].should.startWith('text/plain');
-        res.text.should.be.exactly(error.stack.toString());
-        done();
-      });
+      .expect('Content-Type', /text\/plain/)
+      .expect(500, error.stack.toString(), done)
     });
   });
 
@@ -158,7 +143,7 @@ describe('errorHandler()', function () {
       .get('/')
       .expect(500, function (err) {
         if (err) return done(err)
-        log.should.startWith('Error: boom!\n    at')
+        assert.equal(log.substr(0, 19), 'Error: boom!\n    at')
         done()
       })
     })
@@ -169,7 +154,7 @@ describe('errorHandler()', function () {
       .get('/')
       .expect(500, function (err) {
         if (err) return done(err)
-        log.should.equal('boom!')
+        assert.equal(log, 'boom!')
         done()
       })
     })
@@ -180,7 +165,7 @@ describe('errorHandler()', function () {
       .get('/')
       .expect(500, function (err) {
         if (err) return done(err)
-        log.should.equal('{ hop: \'pop\' }')
+        assert.equal(log, '{ hop: \'pop\' }')
         done()
       })
     })
@@ -191,7 +176,7 @@ describe('errorHandler()', function () {
       .get('/')
       .expect(500, function (err) {
         if (err) return done(err)
-        log.should.equal('42')
+        assert.equal(log, '42')
         done()
       })
     })
@@ -202,7 +187,7 @@ describe('errorHandler()', function () {
       .get('/')
       .expect(500, function (err) {
         if (err) return done(err)
-        log.should.equal('boom!')
+        assert.equal(log, 'boom!')
         done()
       })
     })
