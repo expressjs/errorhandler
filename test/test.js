@@ -17,20 +17,24 @@ describe('errorHandler()', function () {
   })
 
   describe('status code', function () {
-    it('should set the status code to 500 if a non error status code was given', function (done) {
-      var server = createServer({status: 200})
-      request(server)
-      .get('/')
-      .expect(500, done)
-    });
+    describe('when non-error status code', function () {
+      it('should set the status code to 500', function (done) {
+        var server = createServer({status: 200})
+        request(server)
+        .get('/')
+        .expect(500, done)
+      })
+    })
 
-    it('should pass an error status code to the response object', function (done) {
-      var server = createServer({status: 404})
-      request(server)
-      .get('/')
-      .expect(404, done)
-    });
-  });
+    describe('when err.status exists', function () {
+      it('should set res.statusCode', function (done) {
+        var server = createServer({status: 404})
+        request(server)
+        .get('/')
+        .expect(404, done)
+      })
+    })
+  })
 
   describe('response content type', function () {
     var error
@@ -41,42 +45,39 @@ describe('errorHandler()', function () {
         server = createServer(error)
     });
 
-    it('should return a html response when html is accepted', function (done) {
-      request(server)
-      .get('/')
-      .set('Accept', 'text/html')
-      .expect('Content-Type', /text\/html/)
-      .expect(/<title>/)
-      .expect(/Error: boom!/)
-      .expect(/ &nbsp; &nbsp;at/)
-      .end(done)
-    });
+    describe('when "Accept: text/html"', function () {
+      it('should return a html response', function (done) {
+        request(server)
+        .get('/')
+        .set('Accept', 'text/html')
+        .expect('Content-Type', /text\/html/)
+        .expect(/<title>/)
+        .expect(/Error: boom!/)
+        .expect(/ &nbsp; &nbsp;at/)
+        .end(done)
+      })
+    })
 
-    it('should return a json response when json is accepted', function (done) {
-      request(server)
-      .get('/')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /application\/json/)
-      .end(function (err, res) {
-        if (err) throw err;
-        var errorMessage = JSON.parse(res.text);
+    describe('when "Accept: application/json"', function () {
+      it('should return a json response', function (done) {
+        request(server)
+        .get('/')
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /application\/json/)
+        .expect(500, {error: {message: 'boom!', stack: error.stack.toString()}}, done)
+      })
+    })
 
-        assert.strictEqual(typeof errorMessage, 'object')
-        assert.deepEqual(Object.keys(errorMessage).sort(), ['error'])
-        assert.deepEqual(Object.keys(errorMessage.error).sort(), ['message', 'stack'])
-
-        done();
-      });
-    });
-
-    it('should return a plain text response when json or html is not accepted', function (done) {
-      request(server)
-      .get('/')
-      .set('Accept', 'bogus')
-      .expect('Content-Type', /text\/plain/)
-      .expect(500, error.stack.toString(), done)
-    });
-  });
+    describe('when "Accept: text/plain"', function () {
+      it('should return a plain text response', function (done) {
+        request(server)
+        .get('/')
+        .set('Accept', 'bogus')
+        .expect('Content-Type', /text\/plain/)
+        .expect(500, error.stack.toString(), done)
+      })
+    })
+  })
 
   describe('headers sent', function () {
     var server
