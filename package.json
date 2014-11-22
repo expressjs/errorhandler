@@ -13,6 +13,7 @@
     "escape-html": "1.0.1"
   },
   "devDependencies": {
+    "after": "0.8.1",
     "istanbul": "0.3.2",
     "mocha": "~2.0.1",
     "supertest": "~0.15.0"

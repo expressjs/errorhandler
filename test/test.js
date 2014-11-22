@@ -1,10 +1,11 @@
 
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = 'test'
 
+var after = require('after')
 var assert = require('assert')
 var errorHandler = require('..')
 var http = require('http')
-var request = require('supertest');
+var request = require('supertest')
 var util = require('util')
 
 describe('errorHandler()', function () {
@@ -17,20 +18,77 @@ describe('errorHandler()', function () {
   })
 
   describe('status code', function () {
-    it('should set the status code to 500 if a non error status code was given', function (done) {
-      var server = createServer({status: 200})
-      request(server)
-      .get('/')
-      .expect(500, done)
-    });
+    describe('when non-error status code', function () {
+      it('should set the status code to 500', function (done) {
+        var server = createServer({status: 200})
+        request(server)
+        .get('/')
+        .expect(500, done)
+      })
+    })
 
-    it('should pass an error status code to the response object', function (done) {
-      var server = createServer({status: 404})
-      request(server)
-      .get('/')
-      .expect(404, done)
-    });
-  });
+    describe('when err.status exists', function () {
+      it('should set res.statusCode', function (done) {
+        var server = createServer({status: 404})
+        request(server)
+        .get('/')
+        .expect(404, done)
+      })
+    })
+  })
+
+  describe('error value', function () {
+    describe('when Error object', function () {
+      it('should use "stack" property', function (done) {
+        var error = new TypeError('boom!')
+        var server = createServer(error)
+        request(server)
+        .get('/')
+        .set('Accept', 'text/plain')
+        .expect(500, error.stack.toString(), done)
+      })
+    })
+
+    describe('when string', function () {
+      it('should pass-through string', function (done) {
+        var server = createServer('boom!')
+        request(server)
+        .get('/')
+        .set('Accept', 'text/plain')
+        .expect(500, 'boom!', done)
+      })
+    })
+
+    describe('when number', function () {
+      it('should stringify number', function (done) {
+        var server = createServer(42.1)
+        request(server)
+        .get('/')
+        .set('Accept', 'text/plain')
+        .expect(500, '42.1', done)
+      })
+    })
+
+    describe('when object', function () {
+      it('should use util.inspect', function (done) {
+        var server = createServer({hop: 'pop'})
+        request(server)
+        .get('/')
+        .set('Accept', 'text/plain')
+        .expect(500, '{ hop: \'pop\' }', done)
+      })
+    })
+
+    describe('with "toString" property', function () {
+      it('should use "toString" value', function (done) {
+        var server = createServer({toString: function () { return 'boom!' }})
+        request(server)
+        .get('/')
+        .set('Accept', 'text/plain')
+        .expect(500, 'boom!', done)
+      })
+    })
+  })
 
   describe('response content type', function () {
     var error
@@ -38,45 +96,61 @@ describe('errorHandler()', function () {
 
     before(function () {
         error = new Error('boom!')
+        error.description = 'it went this way'
         server = createServer(error)
     });
 
-    it('should return a html response when html is accepted', function (done) {
-      request(server)
-      .get('/')
-      .set('Accept', 'text/html')
-      .expect('Content-Type', /text\/html/)
-      .expect(/<title>/)
-      .expect(/Error: boom!/)
-      .expect(/ &nbsp; &nbsp;at/)
-      .end(done)
-    });
+    describe('when "Accept: text/html"', function () {
+      it('should return a html response', function (done) {
+        request(server)
+        .get('/')
+        .set('Accept', 'text/html')
+        .expect('Content-Type', /text\/html/)
+        .expect(/<title>/)
+        .expect(/Error: boom!/)
+        .expect(/ &nbsp; &nbsp;at/)
+        .end(done)
+      })
+    })
 
-    it('should return a json response when json is accepted', function (done) {
-      request(server)
-      .get('/')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /application\/json/)
-      .end(function (err, res) {
-        if (err) throw err;
-        var errorMessage = JSON.parse(res.text);
+    describe('when "Accept: application/json"', function () {
+      it('should return a json response', function (done) {
+        var body = {
+          error: {
+            message: 'boom!',
+            description: 'it went this way',
+            stack: error.stack.toString()
+          }
+        }
 
-        assert.strictEqual(typeof errorMessage, 'object')
-        assert.deepEqual(Object.keys(errorMessage).sort(), ['error'])
-        assert.deepEqual(Object.keys(errorMessage.error).sort(), ['message', 'stack'])
+        request(server)
+        .get('/')
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /application\/json/)
+        .expect(500, body, done)
+      })
+    })
 
-        done();
-      });
-    });
+    describe('when "Accept: text/plain"', function () {
+      it('should return a plain text response', function (done) {
+        request(server)
+        .get('/')
+        .set('Accept', 'text/plain')
+        .expect('Content-Type', /text\/plain/)
+        .expect(500, error.stack.toString(), done)
+      })
+    })
 
-    it('should return a plain text response when json or html is not accepted', function (done) {
-      request(server)
-      .get('/')
-      .set('Accept', 'bogus')
-      .expect('Content-Type', /text\/plain/)
-      .expect(500, error.stack.toString(), done)
-    });
-  });
+    describe('when "Accept: x-unknown"', function () {
+      it('should return a plain text response', function (done) {
+        request(server)
+        .get('/')
+        .set('Accept', 'x-unknown')
+        .expect('Content-Type', /text\/plain/)
+        .expect(500, error.stack.toString(), done)
+      })
+    })
+  })
 
   describe('headers sent', function () {
     var server
@@ -102,78 +176,37 @@ describe('errorHandler()', function () {
     });
   });
 
-  describe('write error to console.error', function () {
-    var log
-    var old
+  describe('console', function () {
+    var _consoleerror
 
     before(function () {
-      old = console.error
-      console.error = function () {
-        log = util.format.apply(null, arguments)
-      }
+      _consoleerror = console.error
       process.env.NODE_ENV = ''
     })
-    beforeEach(function () {
-      log = undefined
-    })
-    after(function () {
-      console.error = old
+    afterEach(function () {
+      console.error = _consoleerror
       process.env.NODE_ENV = 'test'
     })
 
-    it('should write stack', function (done) {
-      var server = createServer(new Error('boom!'))
-      request(server)
-      .get('/')
-      .expect(500, function (err) {
-        if (err) return done(err)
-        assert.equal(log.substr(0, 19), 'Error: boom!\n    at')
-        done()
-      })
-    })
+    it('should output error', function (done) {
+      var cb = after(2, done)
+      var error = new Error('boom!')
+      var server = createServer(error)
 
-    it('should stringify primitive', function (done) {
-      var server = createServer('boom!')
-      request(server)
-      .get('/')
-      .expect(500, function (err) {
-        if (err) return done(err)
-        assert.equal(log, 'boom!')
-        done()
-      })
-    })
+      console.error = function () {
+        var log = util.format.apply(null, arguments)
 
-    it('should stringify plain object', function (done) {
-      var server = createServer({hop: 'pop'})
-      request(server)
-      .get('/')
-      .expect(500, function (err) {
-        if (err) return done(err)
-        assert.equal(log, '{ hop: \'pop\' }')
-        done()
-      })
-    })
+        if (log !== error.stack.toString()) {
+          return _consoleerror.apply(this, arguments)
+        }
 
-    it('should stringify number', function (done) {
-      var server = createServer(42)
-      request(server)
-      .get('/')
-      .expect(500, function (err) {
-        if (err) return done(err)
-        assert.equal(log, '42')
-        done()
-      })
-    })
+        cb()
+      }
 
-    it('should stringify plain object with toString', function (done) {
-      var server = createServer({toString: function () { return 'boom!' }})
       request(server)
       .get('/')
-      .expect(500, function (err) {
-        if (err) return done(err)
-        assert.equal(log, 'boom!')
-        done()
-      })
+      .set('Accept', 'text/plain')
+      .expect(500, error.stack.toString(), cb)
     })
   })
 })
