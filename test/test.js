@@ -2,30 +2,14 @@
 process.env.NODE_ENV = 'test';
 
 var assert = require('assert')
-var connect = require('connect');
 var errorHandler = require('..')
 var http = require('http')
 var request = require('supertest');
 var util = require('util')
 
 describe('errorHandler()', function () {
-  var app, error, server;
-
-  before(function () {
-    app = connect();
-    app.use(function (req, res, next) {
-      next(error);
-    });
-    app.use(errorHandler());
-    server = http.createServer(app).listen();
-  });
-
-  beforeEach(function () {
-    error = null;
-  });
-
   it('should set nosniff header', function (done) {
-    error = new Error()
+    var server = createServer(new Error('boom!'))
     request(server)
     .get('/')
     .expect('X-Content-Type-Options', 'nosniff')
@@ -34,14 +18,14 @@ describe('errorHandler()', function () {
 
   describe('status code', function () {
     it('should set the status code to 500 if a non error status code was given', function (done) {
-      error = {status: 200};
+      var server = createServer({status: 200})
       request(server)
       .get('/')
       .expect(500, done)
     });
 
     it('should pass an error status code to the response object', function (done) {
-      error = {status: 404};
+      var server = createServer({status: 404})
       request(server)
       .get('/')
       .expect(404, done)
@@ -49,8 +33,12 @@ describe('errorHandler()', function () {
   });
 
   describe('response content type', function () {
-    beforeEach(function () {
-        error = new Error('boom!');
+    var error
+    var server
+
+    before(function () {
+        error = new Error('boom!')
+        server = createServer(error)
     });
 
     it('should return a html response when html is accepted', function (done) {
@@ -91,45 +79,41 @@ describe('errorHandler()', function () {
   });
 
   describe('headers sent', function () {
-    it('should not die', function (done) {
-      var app = connect();
-      var handler = errorHandler();
-      app.use(function (req, res, next) {
-        res.end('0');
-        process.nextTick(function () {
-          handler(new Error('msg'), req, res, function (error) {
-            process.nextTick(function () {
-              throw error;
-            });
-         });
-       });
-      });
+    var server
 
-      request(app)
+    before(function () {
+      var _errorHandler = errorHandler()
+      server = http.createServer(function (req, res) {
+        res.end('0')
+        process.nextTick(function () {
+          _errorHandler(new Error('boom!'), req, res, function (error) {
+            process.nextTick(function () {
+              throw error
+            })
+          })
+        })
+      })
+    })
+
+    it('should not die', function (done) {
+      request(server)
       .get('/')
       .expect(200, done);
     });
   });
 
   describe('write error to console.error', function () {
-    var app
-    var error = null
     var log
     var old
+
     before(function () {
       old = console.error
       console.error = function () {
         log = util.format.apply(null, arguments)
       }
       process.env.NODE_ENV = ''
-      app = connect()
-      app.use(function (req, res, next) {
-        next(error)
-      })
-      app.use(errorHandler())
     })
     beforeEach(function () {
-      error = null
       log = undefined
     })
     after(function () {
@@ -138,8 +122,8 @@ describe('errorHandler()', function () {
     })
 
     it('should write stack', function (done) {
-      error = new Error('boom!')
-      request(app)
+      var server = createServer(new Error('boom!'))
+      request(server)
       .get('/')
       .expect(500, function (err) {
         if (err) return done(err)
@@ -149,8 +133,8 @@ describe('errorHandler()', function () {
     })
 
     it('should stringify primitive', function (done) {
-      error = 'boom!'
-      request(app)
+      var server = createServer('boom!')
+      request(server)
       .get('/')
       .expect(500, function (err) {
         if (err) return done(err)
@@ -160,8 +144,8 @@ describe('errorHandler()', function () {
     })
 
     it('should stringify plain object', function (done) {
-      error = {hop: 'pop'}
-      request(app)
+      var server = createServer({hop: 'pop'})
+      request(server)
       .get('/')
       .expect(500, function (err) {
         if (err) return done(err)
@@ -171,8 +155,8 @@ describe('errorHandler()', function () {
     })
 
     it('should stringify number', function (done) {
-      error = 42
-      request(app)
+      var server = createServer(42)
+      request(server)
       .get('/')
       .expect(500, function (err) {
         if (err) return done(err)
@@ -182,8 +166,8 @@ describe('errorHandler()', function () {
     })
 
     it('should stringify plain object with toString', function (done) {
-      error = {toString: function () { return 'boom!' }}
-      request(app)
+      var server = createServer({toString: function () { return 'boom!' }})
+      request(server)
       .get('/')
       .expect(500, function (err) {
         if (err) return done(err)
@@ -193,3 +177,14 @@ describe('errorHandler()', function () {
     })
   })
 })
+
+function createServer(error) {
+  var _errorHandler = errorHandler()
+
+  return http.createServer(function (req, res) {
+    _errorHandler(error, req, res, function (err) {
+      res.statusCode = err ? 500 : 404
+      res.end(err ? 'Critical: ' + err.stack : 'oops')
+    })
+  })
+}
