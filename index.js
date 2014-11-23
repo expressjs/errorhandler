@@ -3,11 +3,13 @@
  * Copyright(c) 2010 Sencha Inc.
  * Copyright(c) 2011 TJ Holowaychuk
  * Copyright(c) 2014 Jonathan Ong
+ * Copyright(c) 2014 Douglas Christopher Wilson
  * MIT Licensed
  */
 
 /**
  * Module dependencies.
+ * @private
  */
 
 var accepts = require('accepts')
@@ -17,10 +19,16 @@ var util = require('util')
 
 /**
  * Module variables.
+ * @private
  */
 
 var inspect = util.inspect
 var toString = Object.prototype.toString
+
+/* istanbul ignore next */
+var defer = typeof setImmediate === 'function'
+  ? setImmediate
+  : function(fn){ process.nextTick(fn.bind.apply(fn, arguments)) }
 
 /**
  * Error handler:
@@ -47,9 +55,28 @@ var toString = Object.prototype.toString
  * @api public
  */
 
-exports = module.exports = function errorHandler(){
+exports = module.exports = function errorHandler(options) {
   // get environment
   var env = process.env.NODE_ENV || 'development'
+
+  // get options
+  var opts = options || {}
+
+  // get log option
+  var log = opts.log === undefined
+    ? env !== 'test'
+    : opts.log
+
+  if (typeof log !== 'function' && typeof log !== 'boolean') {
+    throw new TypeError('option log must be function or boolean')
+  }
+
+  // default logging using console.error
+  if (log === true) {
+    log = function logerror(err, str) {
+      console.error(str)
+    }
+  }
 
   return function errorHandler(err, req, res, next){
     // respect err.status
@@ -62,9 +89,10 @@ exports = module.exports = function errorHandler(){
       res.statusCode = 500
     }
 
-    // write error to console
-    if (env !== 'test') {
-      console.error(stringify(err))
+    // log the error
+    var str = stringify(err)
+    if (log) {
+      defer(log, err, str, req, res)
     }
 
     // cannot actually respond
@@ -93,7 +121,7 @@ exports = module.exports = function errorHandler(){
               .replace('{stack}', stack)
               .replace('{title}', escapeHtml(exports.title))
               .replace('{statusCode}', res.statusCode)
-              .replace(/\{error\}/g, escapeHtml(stringify(err)).replace(/  /g, ' &nbsp;').replace(/\n/g, '<br>'));
+              .replace(/\{error\}/g, escapeHtml(str).replace(/  /g, ' &nbsp;').replace(/\n/g, '<br>'))
             res.setHeader('Content-Type', 'text/html; charset=utf-8');
             res.end(html);
         });
@@ -108,7 +136,7 @@ exports = module.exports = function errorHandler(){
     // plain text
     } else {
       res.setHeader('Content-Type', 'text/plain');
-      res.end(stringify(err));
+      res.end(str)
     }
   };
 };
