@@ -211,13 +211,178 @@ describe('errorHandler()', function () {
   })
 })
 
-function createServer(error) {
-  var _errorHandler = errorHandler()
+describe('errorHandler(options)', function () {
+  describe('log', function () {
+    it('should reject a string', function () {
+      assert.throws(errorHandler.bind(null, {log: 'yes, please'}), /option log must be/)
+    })
+
+    describe('when "undefined"', function () {
+      var _consoleerror
+
+      before(function () {
+        _consoleerror = console.error
+      })
+      afterEach(function () {
+        console.error = _consoleerror
+      })
+
+      describe('when NODE_ENV == test', function () {
+        alterEnvironment('NODE_ENV', 'test')
+
+        it('should produce no output', function (done) {
+          var error = new Error('boom!')
+          var server = createServer(error)
+
+          console.error = function () {
+            var log = util.format.apply(null, arguments)
+
+            if (log !== error.stack.toString()) {
+              return _consoleerror.apply(this, arguments)
+            }
+
+            done(new Error('console.error written to'))
+          }
+
+          request(server)
+          .get('/')
+          .set('Accept', 'text/plain')
+          .expect(500, error.stack.toString(), done)
+        })
+      })
+
+      describe('when NODE_ENV != test', function () {
+        alterEnvironment('NODE_ENV', '')
+
+        it('should write to console', function (done) {
+          var cb = after(2, done)
+          var error = new Error('boom!')
+          var server = createServer(error)
+
+          console.error = function () {
+            var log = util.format.apply(null, arguments)
+
+            if (log !== error.stack.toString()) {
+              return _consoleerror.apply(this, arguments)
+            }
+
+            cb()
+          }
+
+          request(server)
+          .get('/')
+          .set('Accept', 'text/plain')
+          .expect(500, error.stack.toString(), cb)
+        })
+      })
+    })
+
+    describe('when "true"', function () {
+      var _consoleerror
+
+      before(function () {
+        _consoleerror = console.error
+      })
+      afterEach(function () {
+        console.error = _consoleerror
+      })
+
+      it('should write to console', function (done) {
+        var cb = after(2, done)
+        var error = new Error('boom!')
+        var server = createServer(error, {log: true})
+
+        console.error = function () {
+          var log = util.format.apply(null, arguments)
+
+          if (log !== error.stack.toString()) {
+            return _consoleerror.apply(this, arguments)
+          }
+
+          cb()
+        }
+
+        request(server)
+        .get('/')
+        .set('Accept', 'text/plain')
+        .expect(500, error.stack.toString(), cb)
+      })
+    })
+
+    describe('when "false"', function () {
+      var _consoleerror
+
+      alterEnvironment('NODE_ENV', '')
+      before(function () {
+        _consoleerror = console.error
+      })
+      afterEach(function () {
+        console.error = _consoleerror
+      })
+
+      it('should not write to console', function (done) {
+        var error = new Error('boom!')
+        var server = createServer(error, {log: false})
+
+        console.error = function () {
+          var log = util.format.apply(null, arguments)
+
+          if (log !== error.stack.toString()) {
+            return _consoleerror.apply(this, arguments)
+          }
+
+          done(new Error('console.error written to'))
+        }
+
+        request(server)
+        .get('/')
+        .set('Accept', 'text/plain')
+        .expect(500, error.stack.toString(), done)
+      })
+    })
+
+    describe('when a function', function () {
+      it('should call function', function (done) {
+        var cb = after(2, done)
+        var error = new Error('boom!')
+        var server = createServer(error, {log: log})
+
+        function log(err, str, req, res) {
+          assert.equal(err, error)
+          assert.equal(str, error.stack.toString())
+          assert.equal(req.url, '/')
+          assert.equal(res.statusCode, 500)
+          cb()
+        }
+
+        request(server)
+        .get('/')
+        .set('Accept', 'text/plain')
+        .expect(500, error.stack.toString(), cb)
+      })
+    })
+  })
+})
+
+function createServer(error, options) {
+  var _errorHandler = errorHandler(options)
 
   return http.createServer(function (req, res) {
     _errorHandler(error, req, res, function (err) {
       res.statusCode = err ? 500 : 404
       res.end(err ? 'Critical: ' + err.stack : 'oops')
     })
+  })
+}
+
+function alterEnvironment(key, value) {
+  var prev
+
+  before(function () {
+    prev = process.env[key]
+    process.env[key] = value
+  })
+  after(function () {
+    process.env[key] = prev
   })
 }
