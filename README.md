@@ -101,7 +101,7 @@ function errorNotification(err, str, req) {
 [travis-url]: https://travis-ci.org/expressjs/errorhandler
 [coveralls-image]: https://img.shields.io/coveralls/expressjs/errorhandler.svg?style=flat
 [coveralls-url]: https://coveralls.io/r/expressjs/errorhandler?branch=master
-[downloads-image]: http://img.shields.io/npm/dm/errorhandler.svg?style=flat
+[downloads-image]: https://img.shields.io/npm/dm/errorhandler.svg?style=flat
 [downloads-url]: https://npmjs.org/package/errorhandler
 [gratipay-image]: https://img.shields.io/gratipay/dougwilson.svg?style=flat
 [gratipay-url]: https://www.gratipay.com/dougwilson/
