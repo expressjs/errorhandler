@@ -100,7 +100,7 @@ exports = module.exports = function errorHandler(options) {
 
     // negotiate
     var accept = accepts(req)
-    var type = accept.types('html', 'json', 'text')
+    var type = accept.type('html', 'json', 'text')
 
     // Security header for content sniffing
     res.setHeader('X-Content-Type-Options', 'nosniff')
