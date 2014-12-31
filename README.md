@@ -20,14 +20,18 @@ $ npm install errorhandler
 var errorhandler = require('errorhandler')
 ```
 
-### errorhandler([options])
+### errorhandler(options)
 
 Create new middleware to handle errors and respond with content negotiation.
 This middleware is only intended to be used in a development environment, as
 the full error stack traces will be sent back to the client when an error
 occurs.
 
-#### options.log
+#### Options
+
+Error handler accepts these properties in the options object.
+
+##### log
 
 Provide a function to be called with the error and a string representation of
 the error. Can be used to write the error to any desired location, or set to
