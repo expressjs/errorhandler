@@ -73,9 +73,7 @@ exports = module.exports = function errorHandler(options) {
 
   // default logging using console.error
   if (log === true) {
-    log = function logerror(err, str) {
-      console.error(str)
-    }
+    log = logerror
   }
 
   return function errorHandler(err, req, res, next){
@@ -164,4 +162,13 @@ function stringify(val) {
   return str === toString.call(val)
     ? inspect(val)
     : str
+}
+
+/**
+ * Log error to console.
+ * @api private
+ */
+
+function logerror(err, str) {
+  console.error(str)
 }
