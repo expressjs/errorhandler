@@ -1,3 +1,8 @@
+unreleased
+==========
+
+  * Fix heading content to not include stack
+
 1.2.3 / 2014-11-21
 ==================
 
