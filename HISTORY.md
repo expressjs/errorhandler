@@ -1,5 +1,5 @@
-unreleased
-==========
+1.2.4 / 2015-01-01
+==================
 
   * Fix heading content to not include stack
 
