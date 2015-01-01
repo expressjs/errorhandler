@@ -1,3 +1,8 @@
+unreleased
+==========
+
+  * Fix heading content to not include stack
+
 1.3.1 / 2014-12-31
 ==================
 
@@ -9,6 +14,11 @@
 ==================
 
   * Add `log` option
+
+1.2.4 / 2015-01-01
+==================
+
+  * Fix heading content to not include stack
 
 1.2.3 / 2014-11-21
 ==================

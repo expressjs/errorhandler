@@ -3,7 +3,7 @@
  * Copyright(c) 2010 Sencha Inc.
  * Copyright(c) 2011 TJ Holowaychuk
  * Copyright(c) 2014 Jonathan Ong
- * Copyright(c) 2014 Douglas Christopher Wilson
+ * Copyright(c) 2014-2015 Douglas Christopher Wilson
  * MIT Licensed
  */
 
@@ -22,7 +22,9 @@ var util = require('util')
  * @private
  */
 
+var doubleSpaceGlobalRegExp = /  /g
 var inspect = util.inspect
+var newLineGlobalRegExp = /\n/g
 var toString = Object.prototype.toString
 
 /* istanbul ignore next */
@@ -111,17 +113,24 @@ exports = module.exports = function errorHandler(options) {
         if (e) return next(e);
         fs.readFile(__dirname + '/public/error.html', 'utf8', function(e, html){
           if (e) return next(e);
-          var stack = String(err.stack || '')
-            .split('\n').slice(1)
-            .map(function(v){ return '<li>' + escapeHtml(v).replace(/  /g, ' &nbsp;') + '</li>'; }).join('');
-            html = html
-              .replace('{style}', style)
-              .replace('{stack}', stack)
-              .replace('{title}', escapeHtml(exports.title))
-              .replace('{statusCode}', res.statusCode)
-              .replace(/\{error\}/g, escapeHtml(str).replace(/  /g, ' &nbsp;').replace(/\n/g, '<br>'))
-            res.setHeader('Content-Type', 'text/html; charset=utf-8');
-            res.end(html);
+          var isInspect = !err.stack && String(err) === toString.call(err)
+          var errorHtml = !isInspect
+            ? escapeHtmlBlock(str.split('\n', 1)[0] || 'Error')
+            : 'Error'
+          var stack = !isInspect
+            ? String(str).split('\n').slice(1)
+            : [str]
+          var stackHtml = stack
+            .map(function (v) { return '<li>' + escapeHtmlBlock(v) + '</li>' })
+            .join('')
+          var body = html
+            .replace('{style}', style)
+            .replace('{stack}', stackHtml)
+            .replace('{title}', escapeHtml(exports.title))
+            .replace('{statusCode}', res.statusCode)
+            .replace(/\{error\}/g, errorHtml)
+          res.setHeader('Content-Type', 'text/html; charset=utf-8')
+          res.end(body)
         });
       });
     // json
@@ -144,6 +153,17 @@ exports = module.exports = function errorHandler(options) {
  */
 
 exports.title = 'Connect';
+
+/**
+ * Escape a block of HTML, preserving whitespace.
+ * @api private
+ */
+
+function escapeHtmlBlock(str) {
+  return escapeHtml(str)
+  .replace(doubleSpaceGlobalRegExp, ' &nbsp;')
+  .replace(newLineGlobalRegExp, '<br>')
+}
 
 /**
  * Stringify a value.
