@@ -119,7 +119,7 @@ exports = module.exports = function errorHandler(options) {
               .replace('{stack}', stack)
               .replace('{title}', escapeHtml(exports.title))
               .replace('{statusCode}', res.statusCode)
-              .replace(/\{error\}/g, escapeHtml(str).replace(/  /g, ' &nbsp;').replace(/\n/g, '<br>'))
+              .replace(/\{error\}/g, escapeHtml(String(err)).replace(/  /g, ' &nbsp;').replace(/\n/g, '<br>'))
             res.setHeader('Content-Type', 'text/html; charset=utf-8');
             res.end(html);
         });
