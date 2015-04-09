@@ -35,6 +35,24 @@ describe('errorHandler()', function () {
         .expect(404, done)
       })
     })
+
+    describe('when err.statusCode exists', function () {
+      it('should set res.statusCode', function (done) {
+        var server = createServer({statusCode: 404})
+        request(server)
+        .get('/')
+        .expect(404, done)
+      })
+    })
+
+    describe('when err.statusCode and err.status exist', function () {
+      it('should prefer err.status', function (done) {
+        var server = createServer({statusCode: 400, status: 404})
+        request(server)
+        .get('/')
+        .expect(404, done)
+      })
+    })
   })
 
   describe('error value', function () {

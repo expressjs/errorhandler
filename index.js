@@ -81,6 +81,11 @@ exports = module.exports = function errorHandler(options) {
   }
 
   return function errorHandler(err, req, res, next){
+    // respect err.statusCode
+    if (err.statusCode) {
+      res.statusCode = err.statusCode
+    }
+
     // respect err.status
     if (err.status) {
       res.statusCode = err.status

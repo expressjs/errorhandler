@@ -1,6 +1,7 @@
 unreleased
 ==========
 
+  * Support `statusCode` property on `Error` objects
   * deps: accepts@~1.2.9
     - deps: mime-types@~2.1.1
     - deps: negotiator@0.5.3
