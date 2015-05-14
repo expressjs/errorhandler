@@ -109,7 +109,7 @@ describe('errorHandler()', function () {
         .expect(/<title>Error: boom!<\/title>/)
         .expect(/<h2><em>500<\/em> Error: boom!<\/h2>/)
         .expect(/<li> &nbsp; &nbsp;at/)
-        .end(done)
+        .expect(500, done)
       })
     })
 
