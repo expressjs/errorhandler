@@ -1,6 +1,13 @@
 unreleased
 ==========
 
+  * deps: accepts@~1.2.9
+    - deps: mime-types@~2.1.1
+    - deps: negotiator@0.5.3
+    - perf: avoid argument reassignment & argument slice
+    - perf: avoid negotiator recursive construction
+    - perf: enable strict mode
+    - perf: remove unnecessary bitwise operator
   * deps: escape-html@1.0.2
 
 1.3.6 / 2015-05-14
