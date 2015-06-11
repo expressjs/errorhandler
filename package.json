@@ -10,7 +10,7 @@
   "repository": "expressjs/errorhandler",
   "dependencies": {
     "accepts": "~1.2.6",
-    "escape-html": "1.0.1"
+    "escape-html": "1.0.2"
   },
   "devDependencies": {
     "after": "0.8.1",
