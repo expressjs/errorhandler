@@ -145,11 +145,11 @@ exports = module.exports = function errorHandler(options) {
       var error = { message: err.message, stack: err.stack };
       for (var prop in err) error[prop] = err[prop];
       var json = JSON.stringify({ error: error });
-      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Type', 'application/json; charset=utf-8')
       res.end(json);
     // plain text
     } else {
-      res.setHeader('Content-Type', 'text/plain');
+      res.setHeader('Content-Type', 'text/plain; charset=utf-8')
       res.end(str)
     }
   };
