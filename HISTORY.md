@@ -1,5 +1,5 @@
-unreleased
-==========
+1.4.0 / 2015-06-10
+==================
 
   * Add charset to the `Content-Type` header
   * Support `statusCode` property on `Error` objects
