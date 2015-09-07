@@ -1,6 +1,8 @@
 unreleased
 ==========
 
+  * deps: accepts@~1.2.13
+    - deps: mime-types@~2.1.6
   * deps: escape-html@1.0.3
     - perf: enable strict mode
     - perf: optimize string replacement
