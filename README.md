@@ -13,7 +13,7 @@ the _full error stack traces and internal details of any object passed to this
 module_ will be sent back to the client when an error occurs.
 
 When an object is provided to Express as an error, this module will display
-as much about this object as possible, and will do so by using content negoiation
+as much about this object as possible, and will do so by using content negotiation
 for the response between HTML, JSON, and plain text.
 
   * When the object is a standard `Error` object, the string provided by the
