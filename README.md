@@ -108,6 +108,11 @@ function errorNotification(err, str, req) {
 }
 ```
 
+### Additional Info
+
+Be sure to check out `error-handling` docs http://expressjs.com/en/guide/error-handling.html
+
+
 ## License
 
 [MIT](LICENSE)
