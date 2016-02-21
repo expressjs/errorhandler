@@ -108,6 +108,35 @@ function errorNotification(err, str, req) {
 }
 ```
 
+### errorhandler with Express
+
+```js
+var express = require('express')
+var errorhandler = require('errorhandler')
+var app = express()
+
+app.get('/', function(req, res, next) {
+  res.send('Thanks for visiting our site')
+})
+
+app.get('/blog', function(req, res, next) {
+  res.send('Welcome to our blog')
+})
+
+// errorhandling after routes
+app.use(function(req, res, next) {
+  next(new Error('An error is present'))
+})
+
+errorhandler.title = "Sorry, Error Page"
+
+app.use(errorhandler())
+app.listen(8080)
+```
+
+Define error-handling middleware last, after other app.use() and routes calls.
+
+
 ## License
 
 [MIT](LICENSE)
