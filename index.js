@@ -17,6 +17,7 @@
 var accepts = require('accepts')
 var escapeHtml = require('escape-html');
 var fs = require('fs');
+var path = require('path')
 var util = require('util')
 
 /**
@@ -24,6 +25,8 @@ var util = require('util')
  * @private
  */
 
+var TEMPLATE_PATH = path.join(__dirname, '/public/error.html')
+var STYLESHEET_PATH = path.join(__dirname, '/public/style.css')
 var doubleSpaceGlobalRegExp = /  /g
 var inspect = util.inspect
 var newLineGlobalRegExp = /\n/g
@@ -116,9 +119,9 @@ exports = module.exports = function errorHandler(options) {
 
     // html
     if (type === 'html') {
-      fs.readFile(__dirname + '/public/style.css', 'utf8', function(e, style){
+      fs.readFile(STYLESHEET_PATH, 'utf8', function (e, style) {
         if (e) return next(e);
-        fs.readFile(__dirname + '/public/error.html', 'utf8', function(e, html){
+        fs.readFile(TEMPLATE_PATH, 'utf8', function (e, html) {
           if (e) return next(e);
           var isInspect = !err.stack && String(err) === toString.call(err)
           var errorHtml = !isInspect
