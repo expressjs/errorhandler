@@ -1,6 +1,7 @@
 unreleased
 ==========
 
+  * Pretty print JSON error response
   * perf: resolve file paths at start up
 
 1.4.3 / 2016-01-17
