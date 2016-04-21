@@ -2,6 +2,7 @@ unreleased
 ==========
 
   * Pretty print JSON error response
+  * perf: front-load HTML template and stylesheet at middleware construction
   * perf: resolve file paths at start up
 
 1.4.3 / 2016-01-17

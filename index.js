@@ -83,6 +83,10 @@ exports = module.exports = function errorHandler(options) {
     log = logerror
   }
 
+  // load html and style
+  var html = fs.readFileSync(TEMPLATE_PATH, 'utf8')
+  var style = fs.readFileSync(STYLESHEET_PATH, 'utf8')
+
   return function errorHandler(err, req, res, next){
     // respect err.statusCode
     if (err.statusCode) {
@@ -119,30 +123,24 @@ exports = module.exports = function errorHandler(options) {
 
     // html
     if (type === 'html') {
-      fs.readFile(STYLESHEET_PATH, 'utf8', function (e, style) {
-        if (e) return next(e);
-        fs.readFile(TEMPLATE_PATH, 'utf8', function (e, html) {
-          if (e) return next(e);
-          var isInspect = !err.stack && String(err) === toString.call(err)
-          var errorHtml = !isInspect
-            ? escapeHtmlBlock(str.split('\n', 1)[0] || 'Error')
-            : 'Error'
-          var stack = !isInspect
-            ? String(str).split('\n').slice(1)
-            : [str]
-          var stackHtml = stack
-            .map(function (v) { return '<li>' + escapeHtmlBlock(v) + '</li>' })
-            .join('')
-          var body = html
-            .replace('{style}', style)
-            .replace('{stack}', stackHtml)
-            .replace('{title}', escapeHtml(exports.title))
-            .replace('{statusCode}', res.statusCode)
-            .replace(/\{error\}/g, errorHtml)
-          res.setHeader('Content-Type', 'text/html; charset=utf-8')
-          res.end(body)
-        });
-      });
+      var isInspect = !err.stack && String(err) === toString.call(err)
+      var errorHtml = !isInspect
+        ? escapeHtmlBlock(str.split('\n', 1)[0] || 'Error')
+        : 'Error'
+      var stack = !isInspect
+        ? String(str).split('\n').slice(1)
+        : [str]
+      var stackHtml = stack
+        .map(function (v) { return '<li>' + escapeHtmlBlock(v) + '</li>' })
+        .join('')
+      var body = html
+        .replace('{style}', style)
+        .replace('{stack}', stackHtml)
+        .replace('{title}', escapeHtml(exports.title))
+        .replace('{statusCode}', res.statusCode)
+        .replace(/\{error\}/g, errorHtml)
+      res.setHeader('Content-Type', 'text/html; charset=utf-8')
+      res.end(body)
     // json
     } else if (type === 'json') {
       var error = { message: err.message, stack: err.stack };
