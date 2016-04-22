@@ -25,8 +25,8 @@ var util = require('util')
  * @private
  */
 
-var TEMPLATE_PATH = path.join(__dirname, '/public/error.html')
-var STYLESHEET_PATH = path.join(__dirname, '/public/style.css')
+var TEMPLATE = fs.readFileSync(path.join(__dirname, '/public/error.html'), 'utf8')
+var STYLESHEET = fs.readFileSync(path.join(__dirname, '/public/style.css'), 'utf8')
 var doubleSpaceGlobalRegExp = /  /g
 var inspect = util.inspect
 var newLineGlobalRegExp = /\n/g
@@ -83,10 +83,6 @@ exports = module.exports = function errorHandler(options) {
     log = logerror
   }
 
-  // load html and style
-  var html = fs.readFileSync(TEMPLATE_PATH, 'utf8')
-  var style = fs.readFileSync(STYLESHEET_PATH, 'utf8')
-
   return function errorHandler(err, req, res, next){
     // respect err.statusCode
     if (err.statusCode) {
@@ -133,8 +129,8 @@ exports = module.exports = function errorHandler(options) {
       var stackHtml = stack
         .map(function (v) { return '<li>' + escapeHtmlBlock(v) + '</li>' })
         .join('')
-      var body = html
-        .replace('{style}', style)
+      var body = TEMPLATE
+        .replace('{style}', STYLESHEET)
         .replace('{stack}', stackHtml)
         .replace('{title}', escapeHtml(exports.title))
         .replace('{statusCode}', res.statusCode)
