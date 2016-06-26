@@ -62,6 +62,16 @@ Possible values:
   * `false`: Only send the error back in the response.
   * A function: pass the error to a function for handling.
 
+##### title
+
+Set a custom title to be used as a page header for the template.
+
+The default value for this option is `Connect`.
+
+Possible values:
+
+  * `string`: Set the page header of the template with the string provided.
+
 ## Examples
 
 ### Simple example
