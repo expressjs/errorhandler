@@ -17,6 +17,10 @@ describe('errorHandler()', function () {
     .expect(500, done)
   })
 
+  it('should have property title', function() {
+    assert(errorHandler.hasOwnProperty('title'), 'property title doesn\'t exist')
+  })
+
   describe('status code', function () {
     describe('when non-error status code', function () {
       it('should set the status code to 500', function (done) {
@@ -389,6 +393,12 @@ describe('errorHandler(options)', function () {
         .set('Accept', 'text/plain')
         .expect(500, error.stack.toString(), cb)
       })
+    })
+  })
+
+  describe('title', function() {
+    it('should only accept a string', function() {
+      assert.throws(errorHandler.bind(null, {title: true}), /option title must be/)
     })
   })
 })

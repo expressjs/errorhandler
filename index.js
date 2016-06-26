@@ -83,6 +83,17 @@ exports = module.exports = function errorHandler(options) {
     log = logerror
   }
 
+  // get title option
+  var title = opts.title === undefined
+    ? 'Connect'
+    : opts.title
+
+  if (typeof title !== 'string') {
+    throw new TypeError('option title must be string')
+  }
+
+  exports.title = title
+
   return function errorHandler(err, req, res, next){
     // respect err.statusCode
     if (err.statusCode) {
