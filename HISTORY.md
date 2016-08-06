@@ -2,6 +2,9 @@ unreleased
 ==========
 
   * Pretty print JSON error response
+  * deps: accepts@~1.3.3
+    - deps: mime-types@~2.1.11
+    - deps: negotiator@0.6.1
   * perf: front-load HTML template and stylesheet at middleware construction
   * perf: only load template and stylesheet once
   * perf: resolve file paths at start up
