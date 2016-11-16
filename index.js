@@ -15,8 +15,8 @@
  */
 
 var accepts = require('accepts')
-var escapeHtml = require('escape-html');
-var fs = require('fs');
+var escapeHtml = require('escape-html')
+var fs = require('fs')
 var path = require('path')
 var util = require('util')
 
@@ -25,17 +25,17 @@ var util = require('util')
  * @private
  */
 
-var TEMPLATE = fs.readFileSync(path.join(__dirname, '/public/error.html'), 'utf8')
+var DOUBLE_SPACE_REGEXP = /\x20{2}/g
+var NEW_LINE_REGEXP = /\n/g
 var STYLESHEET = fs.readFileSync(path.join(__dirname, '/public/style.css'), 'utf8')
-var doubleSpaceGlobalRegExp = /  /g
+var TEMPLATE = fs.readFileSync(path.join(__dirname, '/public/error.html'), 'utf8')
 var inspect = util.inspect
-var newLineGlobalRegExp = /\n/g
 var toString = Object.prototype.toString
 
 /* istanbul ignore next */
 var defer = typeof setImmediate === 'function'
   ? setImmediate
-  : function(fn){ process.nextTick(fn.bind.apply(fn, arguments)) }
+  : function (fn) { process.nextTick(fn.bind.apply(fn, arguments)) }
 
 /**
  * Error handler:
@@ -62,7 +62,7 @@ var defer = typeof setImmediate === 'function'
  * @api public
  */
 
-exports = module.exports = function errorHandler(options) {
+exports = module.exports = function errorHandler (options) {
   // get environment
   var env = process.env.NODE_ENV || 'development'
 
@@ -83,7 +83,7 @@ exports = module.exports = function errorHandler(options) {
     log = logerror
   }
 
-  return function errorHandler(err, req, res, next){
+  return function errorHandler (err, req, res, next) {
     // respect err.statusCode
     if (err.statusCode) {
       res.statusCode = err.statusCode
@@ -139,34 +139,34 @@ exports = module.exports = function errorHandler(options) {
       res.end(body)
     // json
     } else if (type === 'json') {
-      var error = { message: err.message, stack: err.stack };
-      for (var prop in err) error[prop] = err[prop];
+      var error = { message: err.message, stack: err.stack }
+      for (var prop in err) error[prop] = err[prop]
       var json = JSON.stringify({ error: error }, null, 2)
       res.setHeader('Content-Type', 'application/json; charset=utf-8')
-      res.end(json);
+      res.end(json)
     // plain text
     } else {
       res.setHeader('Content-Type', 'text/plain; charset=utf-8')
       res.end(str)
     }
-  };
-};
+  }
+}
 
 /**
  * Template title, framework authors may override this value.
  */
 
-exports.title = 'Connect';
+exports.title = 'Connect'
 
 /**
  * Escape a block of HTML, preserving whitespace.
  * @api private
  */
 
-function escapeHtmlBlock(str) {
+function escapeHtmlBlock (str) {
   return escapeHtml(str)
-  .replace(doubleSpaceGlobalRegExp, ' &nbsp;')
-  .replace(newLineGlobalRegExp, '<br>')
+  .replace(DOUBLE_SPACE_REGEXP, ' &nbsp;')
+  .replace(NEW_LINE_REGEXP, '<br>')
 }
 
 /**
@@ -174,7 +174,7 @@ function escapeHtmlBlock(str) {
  * @api private
  */
 
-function stringify(val) {
+function stringify (val) {
   var stack = val.stack
 
   if (stack) {
@@ -193,6 +193,6 @@ function stringify(val) {
  * @api private
  */
 
-function logerror(err, str) {
-  console.error(str)
+function logerror (err, str) {
+  console.error(str || err.stack)
 }

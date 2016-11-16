@@ -113,10 +113,10 @@ describe('errorHandler()', function () {
     var server
 
     before(function () {
-        error = new Error('boom!')
-        error.description = 'it went this way'
-        server = createServer(error)
-    });
+      error = new Error('boom!')
+      error.description = 'it went this way'
+      server = createServer(error)
+    })
 
     describe('when "Accept: text/html"', function () {
       it('should return a html response', function (done) {
@@ -201,9 +201,9 @@ describe('errorHandler()', function () {
     it('should not die', function (done) {
       request(server)
       .get('/')
-      .expect(200, done);
-    });
-  });
+      .expect(200, done)
+    })
+  })
 
   describe('console', function () {
     var _consoleerror
@@ -376,7 +376,7 @@ describe('errorHandler(options)', function () {
         var error = new Error('boom!')
         var server = createServer(error, {log: log})
 
-        function log(err, str, req, res) {
+        function log (err, str, req, res) {
           assert.equal(err, error)
           assert.equal(str, error.stack.toString())
           assert.equal(req.url, '/')
@@ -393,7 +393,7 @@ describe('errorHandler(options)', function () {
   })
 })
 
-function createServer(error, options) {
+function createServer (error, options) {
   var _errorHandler = errorHandler(options)
 
   return http.createServer(function (req, res) {
@@ -404,7 +404,7 @@ function createServer(error, options) {
   })
 }
 
-function alterEnvironment(key, value) {
+function alterEnvironment (key, value) {
   var prev
 
   before(function () {
