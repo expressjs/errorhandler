@@ -1,5 +1,5 @@
-unreleased
-==========
+1.5.0 / 2016-11-15
+==================
 
   * Pretty print JSON error response
   * deps: accepts@~1.3.3
