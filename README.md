@@ -36,6 +36,8 @@ $ npm install errorhandler
 
 ## API
 
+<!-- eslint-disable no-unused-vars -->
+
 ```js
 var errorhandler = require('errorhandler')
 ```
@@ -90,6 +92,8 @@ if (process.env.NODE_ENV === 'development') {
 Sometimes you may want to output the errors to a different location than STDERR
 during development, like a system notification, for example.
 
+<!-- eslint-disable handle-callback-err -->
+
 ```js
 var connect = require('connect')
 var errorhandler = require('errorhandler')
@@ -102,7 +106,7 @@ if (process.env.NODE_ENV === 'development') {
   app.use(errorhandler({log: errorNotification}))
 }
 
-function errorNotification(err, str, req) {
+function errorNotification (err, str, req) {
   var title = 'Error in ' + req.method + ' ' + req.url
 
   notifier.notify({
