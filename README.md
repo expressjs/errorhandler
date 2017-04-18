@@ -116,6 +116,25 @@ function errorNotification (err, str, req) {
 }
 ```
 
+### errorhandler with Express
+
+```js
+Route handlers are middleware functions and
+a middleware is just a function that accepts three parameters(req, res, next).
+middleware included earlier takes precedence over those included later.
+
+Without the router middleware, there can be no routes and routing in Express.
+each route handler has the capability to send a response or pass the request
+to the next route-handling middleware in the current or the next matching route.
+
+app.use(function(req, res, next) {
+  next(new Error('An error is present'))
+})
+```
+
+Define error-handling middleware last, after other app.use() and routes calls.
+
+
 ## License
 
 [MIT](LICENSE)
