@@ -12,9 +12,9 @@ describe('errorHandler()', function () {
   it('should set nosniff header', function (done) {
     var server = createServer(new Error('boom!'))
     request(server)
-    .get('/')
-    .expect('X-Content-Type-Options', 'nosniff')
-    .expect(500, done)
+      .get('/')
+      .expect('X-Content-Type-Options', 'nosniff')
+      .expect(500, done)
   })
 
   describe('status code', function () {
@@ -22,8 +22,8 @@ describe('errorHandler()', function () {
       it('should set the status code to 500', function (done) {
         var server = createServer({status: 200})
         request(server)
-        .get('/')
-        .expect(500, done)
+          .get('/')
+          .expect(500, done)
       })
     })
 
@@ -31,8 +31,8 @@ describe('errorHandler()', function () {
       it('should set res.statusCode', function (done) {
         var server = createServer({status: 404})
         request(server)
-        .get('/')
-        .expect(404, done)
+          .get('/')
+          .expect(404, done)
       })
     })
 
@@ -40,8 +40,8 @@ describe('errorHandler()', function () {
       it('should set res.statusCode', function (done) {
         var server = createServer({statusCode: 404})
         request(server)
-        .get('/')
-        .expect(404, done)
+          .get('/')
+          .expect(404, done)
       })
     })
 
@@ -49,8 +49,8 @@ describe('errorHandler()', function () {
       it('should prefer err.status', function (done) {
         var server = createServer({statusCode: 400, status: 404})
         request(server)
-        .get('/')
-        .expect(404, done)
+          .get('/')
+          .expect(404, done)
       })
     })
   })
@@ -61,9 +61,9 @@ describe('errorHandler()', function () {
         var error = new TypeError('boom!')
         var server = createServer(error)
         request(server)
-        .get('/')
-        .set('Accept', 'text/plain')
-        .expect(500, error.stack.toString(), done)
+          .get('/')
+          .set('Accept', 'text/plain')
+          .expect(500, error.stack.toString(), done)
       })
     })
 
@@ -71,9 +71,9 @@ describe('errorHandler()', function () {
       it('should pass-through string', function (done) {
         var server = createServer('boom!')
         request(server)
-        .get('/')
-        .set('Accept', 'text/plain')
-        .expect(500, 'boom!', done)
+          .get('/')
+          .set('Accept', 'text/plain')
+          .expect(500, 'boom!', done)
       })
     })
 
@@ -81,9 +81,9 @@ describe('errorHandler()', function () {
       it('should stringify number', function (done) {
         var server = createServer(42.1)
         request(server)
-        .get('/')
-        .set('Accept', 'text/plain')
-        .expect(500, '42.1', done)
+          .get('/')
+          .set('Accept', 'text/plain')
+          .expect(500, '42.1', done)
       })
     })
 
@@ -91,9 +91,9 @@ describe('errorHandler()', function () {
       it('should use util.inspect', function (done) {
         var server = createServer({hop: 'pop'})
         request(server)
-        .get('/')
-        .set('Accept', 'text/plain')
-        .expect(500, '{ hop: \'pop\' }', done)
+          .get('/')
+          .set('Accept', 'text/plain')
+          .expect(500, '{ hop: \'pop\' }', done)
       })
     })
 
@@ -101,9 +101,9 @@ describe('errorHandler()', function () {
       it('should use "toString" value', function (done) {
         var server = createServer({toString: function () { return 'boom!' }})
         request(server)
-        .get('/')
-        .set('Accept', 'text/plain')
-        .expect(500, 'boom!', done)
+          .get('/')
+          .set('Accept', 'text/plain')
+          .expect(500, 'boom!', done)
       })
     })
   })
@@ -121,24 +121,24 @@ describe('errorHandler()', function () {
     describe('when "Accept: text/html"', function () {
       it('should return a html response', function (done) {
         request(server)
-        .get('/')
-        .set('Accept', 'text/html')
-        .expect('Content-Type', /text\/html/)
-        .expect(/<title>Error: boom!<\/title>/)
-        .expect(/<h2><em>500<\/em> Error: boom!<\/h2>/)
-        .expect(/<li> &nbsp; &nbsp;at/)
-        .expect(500, done)
+          .get('/')
+          .set('Accept', 'text/html')
+          .expect('Content-Type', /text\/html/)
+          .expect(/<title>Error: boom!<\/title>/)
+          .expect(/<h2><em>500<\/em> Error: boom!<\/h2>/)
+          .expect(/<li> &nbsp; &nbsp;at/)
+          .expect(500, done)
       })
 
       it('should contain inspected object', function (done) {
         request(createServer({ foo: 'bar', fizz: 'buzz' }))
-        .get('/')
-        .set('Accept', 'text/html')
-        .expect('Content-Type', /text\/html/)
-        .expect(/<title>Error<\/title>/)
-        .expect(/<h2><em>500<\/em> Error<\/h2>/)
-        .expect(/<li>{ foo: &#39;bar&#39;, fizz: &#39;buzz&#39; }<\/li>/)
-        .expect(500, done)
+          .get('/')
+          .set('Accept', 'text/html')
+          .expect('Content-Type', /text\/html/)
+          .expect(/<title>Error<\/title>/)
+          .expect(/<h2><em>500<\/em> Error<\/h2>/)
+          .expect(/<li>{ foo: &#39;bar&#39;, fizz: &#39;buzz&#39; }<\/li>/)
+          .expect(500, done)
       })
     })
 
@@ -153,30 +153,30 @@ describe('errorHandler()', function () {
         }
 
         request(server)
-        .get('/')
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /application\/json/)
-        .expect(500, body, done)
+          .get('/')
+          .set('Accept', 'application/json')
+          .expect('Content-Type', /application\/json/)
+          .expect(500, body, done)
       })
     })
 
     describe('when "Accept: text/plain"', function () {
       it('should return a plain text response', function (done) {
         request(server)
-        .get('/')
-        .set('Accept', 'text/plain')
-        .expect('Content-Type', /text\/plain/)
-        .expect(500, error.stack.toString(), done)
+          .get('/')
+          .set('Accept', 'text/plain')
+          .expect('Content-Type', /text\/plain/)
+          .expect(500, error.stack.toString(), done)
       })
     })
 
     describe('when "Accept: x-unknown"', function () {
       it('should return a plain text response', function (done) {
         request(server)
-        .get('/')
-        .set('Accept', 'x-unknown')
-        .expect('Content-Type', /text\/plain/)
-        .expect(500, error.stack.toString(), done)
+          .get('/')
+          .set('Accept', 'x-unknown')
+          .expect('Content-Type', /text\/plain/)
+          .expect(500, error.stack.toString(), done)
       })
     })
   })
@@ -200,8 +200,8 @@ describe('errorHandler()', function () {
 
     it('should not die', function (done) {
       request(server)
-      .get('/')
-      .expect(200, done)
+        .get('/')
+        .expect(200, done)
     })
   })
 
@@ -233,9 +233,9 @@ describe('errorHandler()', function () {
       }
 
       request(server)
-      .get('/')
-      .set('Accept', 'text/plain')
-      .expect(500, error.stack.toString(), cb)
+        .get('/')
+        .set('Accept', 'text/plain')
+        .expect(500, error.stack.toString(), cb)
     })
   })
 })
@@ -274,9 +274,9 @@ describe('errorHandler(options)', function () {
           }
 
           request(server)
-          .get('/')
-          .set('Accept', 'text/plain')
-          .expect(500, error.stack.toString(), done)
+            .get('/')
+            .set('Accept', 'text/plain')
+            .expect(500, error.stack.toString(), done)
         })
       })
 
@@ -299,9 +299,9 @@ describe('errorHandler(options)', function () {
           }
 
           request(server)
-          .get('/')
-          .set('Accept', 'text/plain')
-          .expect(500, error.stack.toString(), cb)
+            .get('/')
+            .set('Accept', 'text/plain')
+            .expect(500, error.stack.toString(), cb)
         })
       })
     })
@@ -332,9 +332,9 @@ describe('errorHandler(options)', function () {
         }
 
         request(server)
-        .get('/')
-        .set('Accept', 'text/plain')
-        .expect(500, error.stack.toString(), cb)
+          .get('/')
+          .set('Accept', 'text/plain')
+          .expect(500, error.stack.toString(), cb)
       })
     })
 
@@ -364,9 +364,9 @@ describe('errorHandler(options)', function () {
         }
 
         request(server)
-        .get('/')
-        .set('Accept', 'text/plain')
-        .expect(500, error.stack.toString(), done)
+          .get('/')
+          .set('Accept', 'text/plain')
+          .expect(500, error.stack.toString(), done)
       })
     })
 
@@ -385,9 +385,9 @@ describe('errorHandler(options)', function () {
         }
 
         request(server)
-        .get('/')
-        .set('Accept', 'text/plain')
-        .expect(500, error.stack.toString(), cb)
+          .get('/')
+          .set('Accept', 'text/plain')
+          .expect(500, error.stack.toString(), cb)
       })
     })
   })

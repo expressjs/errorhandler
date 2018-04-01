@@ -165,8 +165,8 @@ exports.title = 'Connect'
 
 function escapeHtmlBlock (str) {
   return escapeHtml(str)
-  .replace(DOUBLE_SPACE_REGEXP, ' &nbsp;')
-  .replace(NEW_LINE_REGEXP, '<br>')
+    .replace(DOUBLE_SPACE_REGEXP, ' &nbsp;')
+    .replace(NEW_LINE_REGEXP, '<br>')
 }
 
 /**
