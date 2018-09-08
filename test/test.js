@@ -377,10 +377,10 @@ describe('errorHandler(options)', function () {
         var server = createServer(error, {log: log})
 
         function log (err, str, req, res) {
-          assert.equal(err, error)
-          assert.equal(str, error.stack.toString())
-          assert.equal(req.url, '/')
-          assert.equal(res.statusCode, 500)
+          assert.strictEqual(err, error)
+          assert.strictEqual(str, error.stack.toString())
+          assert.strictEqual(req.url, '/')
+          assert.strictEqual(res.statusCode, 500)
           cb()
         }
 
