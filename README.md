@@ -102,7 +102,7 @@ var app = connect()
 
 if (process.env.NODE_ENV === 'development') {
   // only use in development
-  app.use(errorhandler({log: errorNotification}))
+  app.use(errorhandler({ log: errorNotification }))
 }
 
 function errorNotification (err, str, req) {

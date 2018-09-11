@@ -20,7 +20,7 @@ describe('errorHandler()', function () {
   describe('status code', function () {
     describe('when non-error status code', function () {
       it('should set the status code to 500', function (done) {
-        var server = createServer({status: 200})
+        var server = createServer({ status: 200 })
         request(server)
           .get('/')
           .expect(500, done)
@@ -29,7 +29,7 @@ describe('errorHandler()', function () {
 
     describe('when err.status exists', function () {
       it('should set res.statusCode', function (done) {
-        var server = createServer({status: 404})
+        var server = createServer({ status: 404 })
         request(server)
           .get('/')
           .expect(404, done)
@@ -38,7 +38,7 @@ describe('errorHandler()', function () {
 
     describe('when err.statusCode exists', function () {
       it('should set res.statusCode', function (done) {
-        var server = createServer({statusCode: 404})
+        var server = createServer({ statusCode: 404 })
         request(server)
           .get('/')
           .expect(404, done)
@@ -47,7 +47,7 @@ describe('errorHandler()', function () {
 
     describe('when err.statusCode and err.status exist', function () {
       it('should prefer err.status', function (done) {
-        var server = createServer({statusCode: 400, status: 404})
+        var server = createServer({ statusCode: 400, status: 404 })
         request(server)
           .get('/')
           .expect(404, done)
@@ -89,7 +89,7 @@ describe('errorHandler()', function () {
 
     describe('when object', function () {
       it('should use util.inspect', function (done) {
-        var server = createServer({hop: 'pop'})
+        var server = createServer({ hop: 'pop' })
         request(server)
           .get('/')
           .set('Accept', 'text/plain')
@@ -99,7 +99,7 @@ describe('errorHandler()', function () {
 
     describe('with "toString" property', function () {
       it('should use "toString" value', function (done) {
-        var server = createServer({toString: function () { return 'boom!' }})
+        var server = createServer({ toString: function () { return 'boom!' } })
         request(server)
           .get('/')
           .set('Accept', 'text/plain')
@@ -243,7 +243,7 @@ describe('errorHandler()', function () {
 describe('errorHandler(options)', function () {
   describe('log', function () {
     it('should reject a string', function () {
-      assert.throws(errorHandler.bind(null, {log: 'yes, please'}), /option log must be/)
+      assert.throws(errorHandler.bind(null, { log: 'yes, please' }), /option log must be/)
     })
 
     describe('when "undefined"', function () {
@@ -319,7 +319,7 @@ describe('errorHandler(options)', function () {
       it('should write to console', function (done) {
         var cb = after(2, done)
         var error = new Error('boom!')
-        var server = createServer(error, {log: true})
+        var server = createServer(error, { log: true })
 
         console.error = function () {
           var log = util.format.apply(null, arguments)
@@ -351,7 +351,7 @@ describe('errorHandler(options)', function () {
 
       it('should not write to console', function (done) {
         var error = new Error('boom!')
-        var server = createServer(error, {log: false})
+        var server = createServer(error, { log: false })
 
         console.error = function () {
           var log = util.format.apply(null, arguments)
@@ -374,7 +374,7 @@ describe('errorHandler(options)', function () {
       it('should call function', function (done) {
         var cb = after(2, done)
         var error = new Error('boom!')
-        var server = createServer(error, {log: log})
+        var server = createServer(error, { log: log })
 
         function log (err, str, req, res) {
           assert.strictEqual(err, error)
