@@ -1,8 +1,9 @@
 unreleased
 ==========
 
-  * deps: accepts@~1.3.5
-    - deps: mime-types@~2.1.18
+  * deps: accepts@~1.3.7
+    - deps: mime-types@~2.1.24
+    - deps: negotiator@0.6.2
 
 1.5.0 / 2016-11-15
 ==================
