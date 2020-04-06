@@ -38,7 +38,7 @@ $ npm install errorhandler
 <!-- eslint-disable no-unused-vars -->
 
 ```js
-var errorhandler = require('errorhandler')
+const errorhandler = require('errorhandler')
 ```
 
 ### errorhandler(options)
@@ -75,10 +75,10 @@ Basic example of adding this middleware as the error handler only in development
 with `connect` (`express` also can be used in this example).
 
 ```js
-var connect = require('connect')
-var errorhandler = require('errorhandler')
+const connect = require('connect')
+const errorhandler = require('errorhandler')
 
-var app = connect()
+const app = connect()
 
 if (process.env.NODE_ENV === 'development') {
   // only use in development
@@ -94,11 +94,11 @@ during development, like a system notification, for example.
 <!-- eslint-disable handle-callback-err -->
 
 ```js
-var connect = require('connect')
-var errorhandler = require('errorhandler')
-var notifier = require('node-notifier')
+const connect = require('connect')
+const errorhandler = require('errorhandler')
+const notifier = require('node-notifier')
 
-var app = connect()
+const app = connect()
 
 if (process.env.NODE_ENV === 'development') {
   // only use in development
