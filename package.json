@@ -19,14 +19,14 @@
   "devDependencies": {
     "after": "0.8.2",
     "eslint": "8.34.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-markdown": "^3.0.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.6.0",
-    "mocha": "^10.2.0",
-    "nyc": "^15.1.0",
-    "supertest": "^6.3.3"
+    "eslint-config-standard": "14.1.1",
+    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-markdown": "3.0.0",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "6.1.1",
+    "mocha": "10.2.0",
+    "nyc": "15.1.0",
+    "supertest": "6.3.3"
   },
   "files": [
     "public/",
