@@ -1,3 +1,10 @@
+UNRELEASED
+==================
+  * deps: accepts": "~1.3.8"
+    - deps: mime-types@~2.1.34
+      - deps: mime-db@~1.51.0
+    - deps: negotiator@0.6.3
+
 1.5.1 / 2019-05-08
 ==================
 
