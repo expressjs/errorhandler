@@ -2,7 +2,7 @@
 
 [![NPM Version][npm-version-image]][npm-url]
 [![NPM Downloads][npm-downloads-image]][npm-url]
-[![Build Status][ci-image]][ci-url]
+<a href="https://github.com/nanotower/errorhandler/actions/workflows/ci.yml"><img src="https://github.com/nanotower/errorhandler/actions/workflows/ci.yml/badge.svg"></a>
 [![Test Coverage][coveralls-image]][coveralls-url]
 
 Development-only error handler middleware.
@@ -121,8 +121,6 @@ function errorNotification (err, str, req) {
 
 [MIT](LICENSE)
 
-[ci-image]: https://badgen.net/github/checks/nanotower/errorhandler/master
-[ci-url]: https://github.com/nanotower/errorhandler/actions/workflows/ci.yml
 [coveralls-image]: https://badgen.net/coveralls/c/github/nanotower/errorhandler/master
 [coveralls-url]: https://coveralls.io/r/nanotower/errorhandler?branch=master
 [npm-downloads-image]: https://badgen.net/npm/dm/errorhandler
