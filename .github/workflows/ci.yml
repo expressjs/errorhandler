@@ -110,14 +110,14 @@ jobs:
 
         - name: Node.js 12.x
           node-version: "12"
-          npm-i: mocha@9.2.2 supertest@6.1.6
+          npm-i: mocha@9.2.2 supertest@6.1.6 eslint-plugin-standard@4.1.0
 
         - name: Node.js 13.x
           node-version: "13"
-          npm-i: mocha@9.2.2 supertest@6.1.6
-
+          npm-i: mocha@9.2.2 supertest@6.1.6 eslint-plugin-standard@4.1.0
         - name: Node.js 14.x
           node-version: "14"
+          npm-i: mocha@9.2.2 supertest@6.1.6 eslint-plugin-standard@4.1.0
 
         - name: Node.js 15.x
           node-version: "15"
