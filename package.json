@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "after": "0.8.2",
-    "eslint": "^8.57.1",
+    "eslint": "8.34.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-markdown": "^3.0.1",
