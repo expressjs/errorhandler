@@ -2,7 +2,7 @@
 
 [![NPM Version][npm-version-image]][npm-url]
 [![NPM Downloads][npm-downloads-image]][npm-url]
-<a href="https://github.com/nanotower/errorhandler/actions/workflows/ci.yml"><img src="https://github.com/nanotower/errorhandler/actions/workflows/ci.yml/badge.svg"></a>
+<a href="https://github.com/expressjs/errorhandler/actions/workflows/ci.yml"><img src="https://github.com/expressjs/errorhandler/actions/workflows/ci.yml/badge.svg"></a>
 [![Test Coverage][coveralls-image]][coveralls-url]
 
 Development-only error handler middleware.
