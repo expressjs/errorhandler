@@ -2,7 +2,7 @@
 
 [![NPM Version][npm-version-image]][npm-url]
 [![NPM Downloads][npm-downloads-image]][npm-url]
-<a href="https://github.com/nanotower/errorhandler/actions/workflows/ci.yml"><img src="https://github.com/nanotower/errorhandler/actions/workflows/ci.yml/badge.svg"></a>
+<a href="https://github.com/expressjs/errorhandler/actions/workflows/ci.yml"><img src="https://github.com/expressjs/errorhandler/actions/workflows/ci.yml/badge.svg"></a>
 [![Test Coverage][coveralls-image]][coveralls-url]
 
 Development-only error handler middleware.
@@ -121,8 +121,8 @@ function errorNotification (err, str, req) {
 
 [MIT](LICENSE)
 
-[coveralls-image]: https://badgen.net/coveralls/c/github/nanotower/errorhandler/master
-[coveralls-url]: https://coveralls.io/r/nanotower/errorhandler?branch=master
+[coveralls-image]: https://badgen.net/coveralls/c/github/expressjs/errorhandler/master
+[coveralls-url]: https://coveralls.io/r/expressjs/errorhandler?branch=master
 [npm-downloads-image]: https://badgen.net/npm/dm/errorhandler
 [npm-url]: https://npmjs.org/package/errorhandler
 [npm-version-image]: https://badgen.net/npm/v/errorhandler
