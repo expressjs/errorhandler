@@ -31,7 +31,6 @@
   "files": [
     "public/",
     "LICENSE",
-    "HISTORY.md",
     "index.js"
   ],
   "engines": {
