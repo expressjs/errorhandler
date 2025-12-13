@@ -1,4 +1,4 @@
-UNRELEASED
+1.5.2 / 2025-12-15
 ==================
   * deps: accepts": "~1.3.8"
     - deps: mime-types@~2.1.34
