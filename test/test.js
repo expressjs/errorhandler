@@ -19,7 +19,7 @@ describe('errorHandler()', function () {
 
   describe('status code', function () {
     describe('when non-error status code', function () {
-      it('should set the status code to 500', function (done) {
+      it('should default non-error status codes to 500', function (done) {
         var server = createServer({ status: 200 })
         request(server)
           .get('/')
@@ -51,6 +51,36 @@ describe('errorHandler()', function () {
         request(server)
           .get('/')
           .expect(404, done)
+      })
+    })
+
+    describe('when status code is exactly 400', function () {
+      it('should not default to 500', function (done) {
+        var server = createServer({ status: 400 })
+        request(server)
+          .get('/')
+          .expect(400, done)
+      })
+    })
+
+    describe('when status code should default to 500', function () {
+      it('should default codes < 400 and falsy values to 500', function (done) {
+
+        var server1 = createServer({ status: 399 })
+        var server2 = createServer({ statusCode: 0 })
+        var server3 = createServer({ status: 0 })
+
+        var count = 0
+        var servers = [server1, server2, server3]
+        servers.forEach(function (server) {
+          request(server)
+            .get('/')
+            .expect(500, function (err) {
+              if (err) return done(err)
+              count++
+              if (count === servers.length) done()
+            })
+        })
       })
     })
   })
